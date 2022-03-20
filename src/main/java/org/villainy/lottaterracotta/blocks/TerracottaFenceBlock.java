@@ -1,13 +1,13 @@
 package org.villainy.lottaterracotta.blocks;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.FenceBlock;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MaterialColor;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.FenceBlock;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
 import org.villainy.lottaterracotta.config.LottaTerracottaConfig;
 import org.villainy.lottaterracotta.objectholders.TerracottaFenceBlocks;
 
@@ -20,19 +20,19 @@ public class TerracottaFenceBlock extends FenceBlock {
     }
 
     public TerracottaFenceBlock(DyeColor dyeColor) {
-        super(Block.Properties.create(Material.ROCK, dyeColor).hardnessAndResistance(2.0F, 6.0F));
-        setRegistryName(dyeColor.getTranslationKey() + "_terracotta_fence");
+        super(Block.Properties.of(Material.STONE, dyeColor).explosionResistance(1.8F));
+        setRegistryName(dyeColor.getSerializedName() + "_terracotta_fence");
     }
 
     public TerracottaFenceBlock() {
-        super(Block.Properties.create(Material.ROCK, MaterialColor.ADOBE).hardnessAndResistance(2.0F, 6.0F));
+        super(Block.Properties.of(Material.STONE, MaterialColor.COLOR_ORANGE).explosionResistance(1.8F));
         setRegistryName("terracotta_fence");
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
-        if (group == ItemGroup.SEARCH || isEnabled())
-            super.fillItemGroup(group, items);
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
+        if(group == CreativeModeTab.TAB_SEARCH || isEnabled())
+            super.fillItemCategory(group, items);
     }
 
     public static Stream<Block> allBlocks() {

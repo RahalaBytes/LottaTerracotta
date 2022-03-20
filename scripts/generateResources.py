@@ -67,6 +67,7 @@ def generateTags():
     buttons = []
     pressurePlates = []
     fences = []
+    climbable = []
 
     for file in os.listdir(RESOURCES_DIR + '/assets/lottaterracotta/blockstates'):
         if '.json' in file:
@@ -81,6 +82,8 @@ def generateTags():
                 buttons.append(name)
             elif '_fence' in name:
                 fences.append(name)
+            elif '_ladder' in name:
+                climbable.append(name)
 
     writeTagFile('items/walls.json', walls)
     writeTagFile('items/slabs.json', slabs)
@@ -96,6 +99,7 @@ def generateTags():
     writeTagFile('blocks/buttons.json', buttons)
     writeTagFile('blocks/wooden_pressure_plates.json', pressurePlates)
     writeTagFile('blocks/fences.json', fences)
+    writeTagFile('blocks/climbable.json', climbable)
             
 
 # Slabs
@@ -236,7 +240,7 @@ blockTypes = {
     'fence': fenceAssets,
     'fence_gate': fenceGateAssets,
     'ladder': ladderAssets,
-    'sign': signAssets,
+    # 'sign': signAssets,
     'vertical_slab': verticalSlabAssets,
 }
 
@@ -250,7 +254,7 @@ uncoloredBlockTypes = {
     'fence': fenceAssets,
     'fence_gate': fenceGateAssets,
     'ladder': ladderAssets,
-    'sign': signAssets,
+    # 'sign': signAssets,
     'vertical_slab': verticalSlabAssets,
 }
 

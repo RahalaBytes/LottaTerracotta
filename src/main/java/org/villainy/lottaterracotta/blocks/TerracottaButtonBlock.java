@@ -1,13 +1,13 @@
 package org.villainy.lottaterracotta.blocks;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.StoneButtonBlock;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MaterialColor;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.StoneButtonBlock;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
 import org.villainy.lottaterracotta.config.LottaTerracottaConfig;
 import org.villainy.lottaterracotta.objectholders.TerracottaButtonBlocks;
 
@@ -20,19 +20,19 @@ public class TerracottaButtonBlock extends StoneButtonBlock {
     }
 
     public TerracottaButtonBlock(DyeColor dyeColor) {
-        super(Block.Properties.create(Material.ROCK, dyeColor));
-        setRegistryName(dyeColor.getTranslationKey() + "_terracotta_button");
+        super(Block.Properties.of(Material.STONE).color(dyeColor.getMaterialColor()));
+        setRegistryName(dyeColor.getSerializedName() + "_terracotta_button");
     }
 
     public TerracottaButtonBlock() {
-        super(Block.Properties.create(Material.ROCK, MaterialColor.ADOBE));
+        super(Block.Properties.of(Material.STONE).color(MaterialColor.COLOR_ORANGE));
         setRegistryName("terracotta_button");
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
-        if(group == ItemGroup.SEARCH || isEnabled())
-            super.fillItemGroup(group, items);
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
+        if(group == CreativeModeTab.TAB_SEARCH || isEnabled())
+            super.fillItemCategory(group, items);
     }
 
     public static Stream<Block> allBlocks() {

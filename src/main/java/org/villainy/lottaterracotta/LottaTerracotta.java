@@ -1,11 +1,10 @@
 package org.villainy.lottaterracotta;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.RegistryEvent;
@@ -14,11 +13,10 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.network.NetworkRegistry;
-import net.minecraftforge.fml.network.simple.SimpleChannel;
 import net.minecraftforge.registries.IForgeRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,14 +24,10 @@ import org.villainy.lottaterracotta.blocks.*;
 import org.villainy.lottaterracotta.config.ConfigHelper;
 import org.villainy.lottaterracotta.config.ConfigHolder;
 import org.villainy.lottaterracotta.config.FlagRecipeCondition;
-import org.villainy.lottaterracotta.items.TerracottaSignItem;
 import org.villainy.lottaterracotta.items.helper.BlockItemHelper;
-import org.villainy.lottaterracotta.network.OpenTerracottaSignEditor;
-import org.villainy.lottaterracotta.objectholders.TerracottaSignBlocks;
 import org.villainy.lottaterracotta.proxy.ClientProxy;
 import org.villainy.lottaterracotta.proxy.IProxy;
 import org.villainy.lottaterracotta.proxy.CommonProxy;
-import org.villainy.lottaterracotta.tileEntities.TerracottaSignTileEntity;
 
 import java.util.stream.Stream;
 
@@ -44,12 +38,6 @@ public class LottaTerracotta
 
     public static final String CHANNEL = MODID;
     private static final String PROTOCOL_VERSION = "1.0";
-    public static SimpleChannel channel = NetworkRegistry.ChannelBuilder
-            .named(new ResourceLocation(MODID, CHANNEL))
-            .clientAcceptedVersions(PROTOCOL_VERSION::equals)
-            .serverAcceptedVersions(PROTOCOL_VERSION::equals)
-            .networkProtocolVersion(() -> PROTOCOL_VERSION)
-            .simpleChannel();
 
     public static IProxy proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> CommonProxy::new);
 
@@ -73,8 +61,6 @@ public class LottaTerracotta
 
     private void commonSetup(final FMLCommonSetupEvent event)
     {
-        int messageNumber = 0;
-        channel.registerMessage(messageNumber++, OpenTerracottaSignEditor.class, OpenTerracottaSignEditor::encode, OpenTerracottaSignEditor::new, OpenTerracottaSignEditor::handle);
     }
 
     private void loadComplete(final FMLLoadCompleteEvent event)
@@ -91,15 +77,14 @@ public class LottaTerracotta
             Stream.of(DyeColor.values()).forEach(dyeColor -> {
                 TerracottaSlabBlock slab = new TerracottaSlabBlock(dyeColor);
 
-                blockRegistry.register(new TerracottaSlabBlock(dyeColor));
-                blockRegistry.register(new TerracottaStairsBlock(dyeColor, slab.getDefaultState()));
+                blockRegistry.register(slab);
+                blockRegistry.register(new TerracottaStairsBlock(dyeColor, slab.defaultBlockState()));
                 blockRegistry.register(new TerracottaWallBlock(dyeColor));
                 blockRegistry.register(new TerracottaButtonBlock(dyeColor));
                 blockRegistry.register(new TerracottaPressurePlateBlock(dyeColor));
                 blockRegistry.register(new TerracottaFenceBlock(dyeColor));
                 blockRegistry.register(new TerracottaFenceGateBlock(dyeColor));
                 blockRegistry.register(new TerracottaLadderBlock(dyeColor));
-                blockRegistry.register(new TerracottaSignBlock(dyeColor));
                 blockRegistry.register(new TerracottaLeverBlock(dyeColor));
                 blockRegistry.register(new TerracottaVerticalSlabBlock(dyeColor));
                 blockRegistry.register(new GlazedTerracottaTileBlock(dyeColor));
@@ -108,15 +93,14 @@ public class LottaTerracotta
 
             // Register uncolored versions
             TerracottaSlabBlock slab = new TerracottaSlabBlock();
-            blockRegistry.register(new TerracottaSlabBlock());
-            blockRegistry.register(new TerracottaStairsBlock(slab.getDefaultState()));
+            blockRegistry.register(slab);
+            blockRegistry.register(new TerracottaStairsBlock(slab.defaultBlockState()));
             blockRegistry.register(new TerracottaWallBlock());
             blockRegistry.register(new TerracottaButtonBlock());
             blockRegistry.register(new TerracottaPressurePlateBlock());
             blockRegistry.register(new TerracottaFenceBlock());
             blockRegistry.register(new TerracottaFenceGateBlock());
             blockRegistry.register(new TerracottaLadderBlock());
-            blockRegistry.register(new TerracottaSignBlock());
             blockRegistry.register(new TerracottaLeverBlock());
             blockRegistry.register(new TerracottaVerticalSlabBlock());
         }
@@ -126,73 +110,45 @@ public class LottaTerracotta
             final IForgeRegistry<Item> itemRegistry = event.getRegistry();
 
             TerracottaSlabBlock.allBlocks().forEach (block ->
-                    itemRegistry.register(BlockItemHelper.createBasicBlockItem(block, ItemGroup.BUILDING_BLOCKS))
+                    itemRegistry.register(BlockItemHelper.createBasicBlockItem(block, CreativeModeTab.TAB_BUILDING_BLOCKS))
             );
             TerracottaStairsBlock.allBlocks().forEach (block ->
-                    itemRegistry.register(BlockItemHelper.createBasicBlockItem(block, ItemGroup.BUILDING_BLOCKS))
+                    itemRegistry.register(BlockItemHelper.createBasicBlockItem(block, CreativeModeTab.TAB_BUILDING_BLOCKS))
             );
             TerracottaWallBlock.allBlocks().forEach (block ->
-                    itemRegistry.register(BlockItemHelper.createBasicBlockItem(block, ItemGroup.DECORATIONS))
+                    itemRegistry.register(BlockItemHelper.createBasicBlockItem(block, CreativeModeTab.TAB_DECORATIONS))
             );
             TerracottaButtonBlock.allBlocks().forEach (block ->
-                    itemRegistry.register(BlockItemHelper.createBasicBlockItem(block, ItemGroup.REDSTONE))
+                    itemRegistry.register(BlockItemHelper.createBasicBlockItem(block, CreativeModeTab.TAB_REDSTONE))
             );
             TerracottaPressurePlateBlock.allBlocks().forEach (block ->
-                    itemRegistry.register(BlockItemHelper.createBasicBlockItem(block, ItemGroup.REDSTONE))
+                    itemRegistry.register(BlockItemHelper.createBasicBlockItem(block, CreativeModeTab.TAB_REDSTONE))
             );
             TerracottaFenceBlock.allBlocks().forEach (block ->
-                    itemRegistry.register(BlockItemHelper.createBasicBlockItem(block, ItemGroup.DECORATIONS))
+                    itemRegistry.register(BlockItemHelper.createBasicBlockItem(block, CreativeModeTab.TAB_DECORATIONS))
             );
             TerracottaFenceGateBlock.allBlocks().forEach (block ->
-                    itemRegistry.register(BlockItemHelper.createBasicBlockItem(block, ItemGroup.DECORATIONS))
+                    itemRegistry.register(BlockItemHelper.createBasicBlockItem(block, CreativeModeTab.TAB_DECORATIONS))
             );
             TerracottaLadderBlock.allBlocks().forEach (block ->
-                    itemRegistry.register(BlockItemHelper.createBasicBlockItem(block, ItemGroup.DECORATIONS))
+                    itemRegistry.register(BlockItemHelper.createBasicBlockItem(block, CreativeModeTab.TAB_DECORATIONS))
             );
-            TerracottaSignBlock.allBlocks().forEach (block ->
-                    itemRegistry.register(new TerracottaSignItem(block))
-			);
             TerracottaLeverBlock.allBlocks().forEach (block ->
-                    itemRegistry.register(BlockItemHelper.createBasicBlockItem(block, ItemGroup.REDSTONE))
+                    itemRegistry.register(BlockItemHelper.createBasicBlockItem(block, CreativeModeTab.TAB_REDSTONE))
             );
             TerracottaVerticalSlabBlock.allBlocks().forEach (block ->
-                    itemRegistry.register(BlockItemHelper.createBasicBlockItem(block, ItemGroup.BUILDING_BLOCKS))
+                    itemRegistry.register(BlockItemHelper.createBasicBlockItem(block, CreativeModeTab.TAB_BUILDING_BLOCKS))
             );
             GlazedTerracottaTileBlock.allBlocks().forEach (block ->
-                    itemRegistry.register(BlockItemHelper.createBasicBlockItem(block, ItemGroup.DECORATIONS))
+                    itemRegistry.register(BlockItemHelper.createBasicBlockItem(block, CreativeModeTab.TAB_DECORATIONS))
             );
             GlazedTerracottaSlabBlock.allBlocks().forEach (block ->
-                    itemRegistry.register(BlockItemHelper.createBasicBlockItem(block, ItemGroup.DECORATIONS))
+                    itemRegistry.register(BlockItemHelper.createBasicBlockItem(block, CreativeModeTab.TAB_DECORATIONS))
             );
         }
 
         @SubscribeEvent
-        public static void onTileEntityRegistry(final RegistryEvent.Register<TileEntityType<?>> event) {
-            TileEntityType<?> terracottaSignType = TileEntityType.Builder.create(TerracottaSignTileEntity::new,
-                    TerracottaSignBlocks.UNCOLORED,
-                    TerracottaSignBlocks.WHITE,
-                    TerracottaSignBlocks.ORANGE,
-                    TerracottaSignBlocks.MAGENTA,
-                    TerracottaSignBlocks.LIGHT_BLUE,
-                    TerracottaSignBlocks.YELLOW,
-                    TerracottaSignBlocks.LIME,
-                    TerracottaSignBlocks.PINK,
-                    TerracottaSignBlocks.GRAY,
-                    TerracottaSignBlocks.LIGHT_GRAY,
-                    TerracottaSignBlocks.CYAN,
-                    TerracottaSignBlocks.PURPLE,
-                    TerracottaSignBlocks.BLUE,
-                    TerracottaSignBlocks.BROWN,
-                    TerracottaSignBlocks.GREEN,
-                    TerracottaSignBlocks.RED,
-                    TerracottaSignBlocks.BLACK
-            ).build(null);
-            terracottaSignType.setRegistryName(MODID, "terracotta_sign_tile_entity");
-            event.getRegistry().register(terracottaSignType);
-        }
-
-        @SubscribeEvent
-        public static void onModConfigEvent(final ModConfig.ModConfigEvent event) {
+        public static void onModConfigEvent(final ModConfigEvent.Loading event) {
             final ModConfig config = event.getConfig();
             if (config.getSpec() == ConfigHolder.COMMON_SPEC) {
                 ConfigHelper.bakeCommon(config);

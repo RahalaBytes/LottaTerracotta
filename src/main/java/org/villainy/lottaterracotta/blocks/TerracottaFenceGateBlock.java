@@ -1,14 +1,14 @@
 package org.villainy.lottaterracotta.blocks;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.FenceGateBlock;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MaterialColor;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.FenceGateBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
 import org.villainy.lottaterracotta.config.LottaTerracottaConfig;
 import org.villainy.lottaterracotta.objectholders.TerracottaFenceGateBlocks;
 
@@ -21,23 +21,23 @@ public class TerracottaFenceGateBlock extends FenceGateBlock {
     }
 
     public TerracottaFenceGateBlock(DyeColor dyeColor) {
-        super(Block.Properties.create(Material.ROCK, dyeColor)
-                .hardnessAndResistance(2.0F, 6.0F)
+        super(Block.Properties.of(Material.STONE, dyeColor)
+                .explosionResistance(1.8F)
                 .sound(SoundType.STONE));
-        setRegistryName(dyeColor.getTranslationKey() + "_terracotta_fence_gate");
+        setRegistryName(dyeColor.getSerializedName() + "_terracotta_fence_gate");
     }
 
     public TerracottaFenceGateBlock() {
-        super(Block.Properties.create(Material.ROCK, MaterialColor.ADOBE)
-                .hardnessAndResistance(2.0F, 6.0F)
+        super(Block.Properties.of(Material.STONE, MaterialColor.COLOR_ORANGE)
+                .explosionResistance(1.8F)
                 .sound(SoundType.STONE));
         setRegistryName("terracotta_fence_gate");
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
-        if (group == ItemGroup.SEARCH || isEnabled())
-            super.fillItemGroup(group, items);
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
+        if(group == CreativeModeTab.TAB_SEARCH || isEnabled())
+            super.fillItemCategory(group, items);
     }
 
     public static Stream<Block> allBlocks() {

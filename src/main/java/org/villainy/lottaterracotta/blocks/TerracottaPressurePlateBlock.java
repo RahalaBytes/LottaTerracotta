@@ -1,13 +1,13 @@
 package org.villainy.lottaterracotta.blocks;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.PressurePlateBlock;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MaterialColor;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.PressurePlateBlock;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
 import org.villainy.lottaterracotta.config.LottaTerracottaConfig;
 import org.villainy.lottaterracotta.objectholders.TerracottaPressurePlateBlocks;
 
@@ -21,24 +21,24 @@ public class TerracottaPressurePlateBlock extends PressurePlateBlock {
 
     public TerracottaPressurePlateBlock(DyeColor dyeColor) {
         super(Sensitivity.EVERYTHING,
-                Block.Properties.create(Material.ROCK, dyeColor)
-                        .doesNotBlockMovement()
-                        .hardnessAndResistance(0.5F));
-        setRegistryName(dyeColor.getTranslationKey() + "_terracotta_pressure_plate");
+                Block.Properties.of(Material.STONE, dyeColor)
+                        .noCollission()
+                        .explosionResistance(0.5F));
+        setRegistryName(dyeColor.getSerializedName() + "_terracotta_pressure_plate");
     }
 
     public TerracottaPressurePlateBlock() {
         super(Sensitivity.EVERYTHING,
-                Block.Properties.create(Material.ROCK, MaterialColor.ADOBE)
-                        .doesNotBlockMovement()
-                        .hardnessAndResistance(0.5F));
+                Block.Properties.of(Material.STONE, MaterialColor.COLOR_ORANGE)
+                        .noCollission()
+                        .explosionResistance(0.5F));
         setRegistryName("terracotta_pressure_plate");
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
-        if (group == ItemGroup.SEARCH || isEnabled())
-            super.fillItemGroup(group, items);
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
+        if(group == CreativeModeTab.TAB_SEARCH || isEnabled())
+            super.fillItemCategory(group, items);
     }
 
     public static Stream<Block> allBlocks() {

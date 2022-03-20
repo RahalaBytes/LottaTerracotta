@@ -1,12 +1,13 @@
 package org.villainy.lottaterracotta.blocks;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MaterialColor;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import com.teamabnormals.blueprint.common.block.VerticalSlabBlock;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
 import org.villainy.lottaterracotta.config.LottaTerracottaConfig;
 import org.villainy.lottaterracotta.objectholders.TerracottaVerticalSlabBlocks;
 
@@ -18,19 +19,19 @@ public class TerracottaVerticalSlabBlock extends VerticalSlabBlock {
     }
 
     public TerracottaVerticalSlabBlock(DyeColor dyeColor) {
-        super(Block.Properties.create(Material.ROCK, dyeColor).hardnessAndResistance(1.8F));
-        setRegistryName(dyeColor.getTranslationKey() + "_terracotta_vertical_slab");
+        super(Block.Properties.of(Material.STONE, dyeColor).explosionResistance(1.8F));
+        setRegistryName(dyeColor.getSerializedName() + "_terracotta_vertical_slab");
     }
 
     public TerracottaVerticalSlabBlock() {
-        super(Block.Properties.create(Material.ROCK, MaterialColor.ADOBE).hardnessAndResistance(1.8F));
+        super(Block.Properties.of(Material.STONE, MaterialColor.COLOR_ORANGE).explosionResistance(1.8F));
         setRegistryName("terracotta_vertical_slab");
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
-        if (group == ItemGroup.SEARCH || isEnabled())
-            super.fillItemGroup(group, items);
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
+        if(group == CreativeModeTab.TAB_SEARCH || isEnabled())
+            super.fillItemCategory(group, items);
     }
 
     static public Stream<Block> allBlocks() {
