@@ -1,3 +1,8 @@
+### v1.4 Current Version
+
+#### Removed Features
+* Removed support for signs (may return later)
+
 ### v1.3.2 Current Version
 
 #### Bug fixes
