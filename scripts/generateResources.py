@@ -68,6 +68,7 @@ def generateTags():
     pressurePlates = []
     fences = []
     climbable = []
+    mineablePickaxe = []
 
     for file in os.listdir(RESOURCES_DIR + '/assets/lottaterracotta/blockstates'):
         if '.json' in file:
@@ -85,6 +86,9 @@ def generateTags():
             elif '_ladder' in name:
                 climbable.append(name)
 
+            if not '_ladder' in name:
+                mineablePickaxe.append(name)
+
     writeTagFile('items/walls.json', walls)
     writeTagFile('items/slabs.json', slabs)
     writeTagFile('items/stairs.json', stairs)
@@ -100,6 +104,7 @@ def generateTags():
     writeTagFile('blocks/wooden_pressure_plates.json', pressurePlates)
     writeTagFile('blocks/fences.json', fences)
     writeTagFile('blocks/climbable.json', climbable)
+    writeTagFile('blocks/mineable/pickaxe.json', mineablePickaxe)
             
 
 # Slabs

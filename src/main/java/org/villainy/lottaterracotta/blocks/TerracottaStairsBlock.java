@@ -21,12 +21,12 @@ public class TerracottaStairsBlock extends StairBlock {
     }
 
     public TerracottaStairsBlock(DyeColor dyeColor, BlockState blockState) {
-        super(blockState, Block.Properties.of(Material.STONE, dyeColor).explosionResistance(1.8F));
+        super(blockState, Block.Properties.of(Material.STONE, dyeColor).strength(1.8F));
         setRegistryName(dyeColor.getSerializedName() + "_terracotta_stairs");
     }
 
     public TerracottaStairsBlock(BlockState blockState) {
-        super(blockState, Block.Properties.of(Material.STONE, MaterialColor.COLOR_ORANGE).explosionResistance(1.8F));
+        super(blockState, Block.Properties.of(Material.STONE, MaterialColor.COLOR_ORANGE).requiresCorrectToolForDrops().strength(1.25F, 4.2F));
         setRegistryName("terracotta_stairs");
     }
 

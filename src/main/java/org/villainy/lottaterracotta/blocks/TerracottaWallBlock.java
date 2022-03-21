@@ -20,12 +20,12 @@ public class TerracottaWallBlock extends WallBlock {
     }
 
     public TerracottaWallBlock(DyeColor dyeColor) {
-        super(Block.Properties.of(Material.STONE, dyeColor).explosionResistance(1.8F));
+        super(Block.Properties.of(Material.STONE, dyeColor).requiresCorrectToolForDrops().strength(1.25F, 4.2F));
         setRegistryName(dyeColor.getSerializedName() + "_terracotta_wall");
     }
 
     public TerracottaWallBlock() {
-        super(Block.Properties.of(Material.STONE, MaterialColor.COLOR_ORANGE).explosionResistance(1.8F));
+        super(Block.Properties.of(Material.STONE, MaterialColor.COLOR_ORANGE).strength(1.25F, 4.2F));
         setRegistryName("terracotta_wall");
     }
 

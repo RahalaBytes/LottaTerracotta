@@ -23,7 +23,7 @@ public class TerracottaPressurePlateBlock extends PressurePlateBlock {
         super(Sensitivity.EVERYTHING,
                 Block.Properties.of(Material.STONE, dyeColor)
                         .noCollission()
-                        .explosionResistance(0.5F));
+                        .strength(0.5F));
         setRegistryName(dyeColor.getSerializedName() + "_terracotta_pressure_plate");
     }
 
@@ -31,7 +31,7 @@ public class TerracottaPressurePlateBlock extends PressurePlateBlock {
         super(Sensitivity.EVERYTHING,
                 Block.Properties.of(Material.STONE, MaterialColor.COLOR_ORANGE)
                         .noCollission()
-                        .explosionResistance(0.5F));
+                        .strength(0.5F));
         setRegistryName("terracotta_pressure_plate");
     }
 

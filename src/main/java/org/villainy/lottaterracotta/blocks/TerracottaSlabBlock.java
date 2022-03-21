@@ -5,6 +5,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
@@ -20,12 +21,12 @@ public class TerracottaSlabBlock extends SlabBlock {
     }
 
     public TerracottaSlabBlock(DyeColor dyeColor) {
-        super(Block.Properties.of(Material.STONE, dyeColor).explosionResistance(1.8F));
+        super(Block.Properties.copy(Blocks.TERRACOTTA).of(Material.STONE, dyeColor).requiresCorrectToolForDrops().strength(1.25F, 4.2F));
         setRegistryName(dyeColor.getSerializedName() + "_terracotta_slab");
     }
 
     public TerracottaSlabBlock() {
-        super(Block.Properties.of(Material.STONE, MaterialColor.COLOR_ORANGE).explosionResistance(1.8F));
+        super(Block.Properties.of(Material.STONE, MaterialColor.COLOR_ORANGE).strength(1.25F, 4.2F));
         setRegistryName("terracotta_slab");
     }
 

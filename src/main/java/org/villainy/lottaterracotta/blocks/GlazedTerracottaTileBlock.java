@@ -28,7 +28,7 @@ public class GlazedTerracottaTileBlock extends CarpetBlock {
     public static final DirectionProperty HORIZONTAL_FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     public GlazedTerracottaTileBlock(DyeColor dyeColor) {
-        super(Block.Properties.of(Material.STONE, dyeColor).explosionResistance(0.1F));
+        super(Block.Properties.of(Material.STONE, dyeColor).strength(0.1F));
         setRegistryName(dyeColor.getSerializedName() + "_glazed_terracotta_tile");
     }
 

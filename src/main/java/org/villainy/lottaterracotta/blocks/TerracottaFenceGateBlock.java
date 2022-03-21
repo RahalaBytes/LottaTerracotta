@@ -22,7 +22,8 @@ public class TerracottaFenceGateBlock extends FenceGateBlock {
 
     public TerracottaFenceGateBlock(DyeColor dyeColor) {
         super(Block.Properties.of(Material.STONE, dyeColor)
-                .explosionResistance(1.8F)
+                .requiresCorrectToolForDrops()
+                .strength(1.25F, 4.2F)
                 .sound(SoundType.STONE));
         setRegistryName(dyeColor.getSerializedName() + "_terracotta_fence_gate");
     }
