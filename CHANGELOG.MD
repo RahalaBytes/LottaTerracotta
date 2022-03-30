@@ -1,4 +1,9 @@
-### v1.4 Current Version
+### v1.4.1
+
+#### Bug fixes
+* Fix crash on newer versions of Forge
+
+### v1.4
 
 #### Removed Features
 * Removed support for signs (may return later)
